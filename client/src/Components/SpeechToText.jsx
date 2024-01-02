@@ -1,24 +1,51 @@
-import React from 'react'
-import Navbar from './Navbar'
+import React, { useEffect, useState } from "react";
+import Navbar from "./Navbar";
 
 export const SpeechToText = () => {
+  
+    const [ws,setWs] = useState(null);
+    useEffect(()=>{
+       const ws  =  new WebSocket('ws://localhost:8000');
+       setWs(ws);
+       ws.addEventListener('message',handleMessage)
+       
+
+    },[])
+    function handleMessage(e){
+        console.log('new Message',e);
+    }
   return (
     <>
-     
-     <div 
-        className=" flex-shrink-0 bg-no-repeat bg-[url('https://s3-alpha-sig.figma.com/img/f92d/0a41/878799f848da9fe7de85284851b01be7?Expires=1705276800&Signature=Pgaj-IGeyPcWGKkLPBf-h9j4CjL8KVka25TE5IgXki7cXxlMPhe2sCUhYGZ9iFDNgUWTUhEpTvgBWaNIR9IRtLVZfSRrR-c7qU-xKI6phYoHyY3Z6GHr0B8kHTkZGuRwO9V3qJ2Pz4hRLwfp3-K7AMkRnE9MBuhxOJlvKjIUOAhVeHAX8zpwQv336kN3XkiArmZGI96NncfbHjqGz0ow-Ysn65xC7CWXSeHEinhEEE2RZylfwQPrSqcdOwKOAbJ7D~PGQS3L14l22kx1G0LnEzp00jQNqGOr8MEvTl6q1zRyKqdn~qeyChNQSfwvEIpnzzvP6NDLPH8FBFl3ekQE0A__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')] 
-    h-screen bg-cover "
-      >
-        <Navbar/>
-        <section className='flex flex-col items-center justify-center'>
-                <div>
-                    
-                </div>
-                <div>chat box</div>
-
-        </section>
-       
+      <div className="flex h-screen">
+        <div className="bg-blue-100 w-1/3">contacts</div>
+        <div className="flex flex-col bg-blue-300 w-2/3 p-2">
+          <div className="flex-grow">Message with selected person</div>
+         <div className="flex gap-2 mx-2">
+            <input
+              type="text"
+              className="bg-white border p-2 rounded-sm"
+              placeholder="Type your message"
+            />
+         
+          <button className="bg-blue-500 p-2 text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+              />
+            </svg>
+          </button>
+          </div>
         </div>
+      </div>
     </>
-  )
-}
+  );
+};
