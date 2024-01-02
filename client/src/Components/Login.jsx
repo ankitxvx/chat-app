@@ -6,12 +6,7 @@ import { UserContext } from "../UserContext";
 import Chat from "./Chat";
 
 export default function Login() {
-  const {userLoginname,id} = useContext(UserContext);
-    console.log(userLoginname)
-    if(userLoginname){
-        return  loggedinn;
-    }
- 
+   
   return (
     <>
     

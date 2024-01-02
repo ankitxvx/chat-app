@@ -4,11 +4,11 @@ import { UserContext } from "./UserContext";
 import Chat from "./Components/Chat";
 
 export default function Routes(){
-    const {username,id} = useContext(UserContext);
-    console.log(username)
-    if(username!==''){
-         return  <Chat/>;
-    }
+    // const {username,id} = useContext(UserContext);
+    // console.log(username)
+    // if(username!==''){
+    //      return  <Chat/>;
+    // }
     return(
         <Register/>
     )

@@ -1,20 +1,34 @@
 import {useContext, useState} from "react";
 import axios from "axios";
 import {UserContext} from "../UserContext";
-
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function RegisterAndLoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginOrRegister, setIsLoginOrRegister] = useState('login');
   const {setUsername:setLoggedInUsername, setId} = useContext(UserContext);
+  const navigate = useNavigate();
   async function handleSubmit(ev) {
     ev.preventDefault();
     const url = isLoginOrRegister === 'register' ? 'register' : 'login';
     const {data} = await axios.post(url, {username,password});
     setLoggedInUsername(username);
     setId(data.id);
+    
+    if(url==='register'){
+      setIsLoginOrRegister('login');
+      setUsername('');
+      setPassword('');
+      navigate('/login');
+    }
+    else{
+      navigate('/stt')
+    }
+   
+
   }
+  
 
   return (
     <div className="flex flex-col h-[380px] w-[410px] backdrop-filter backdrop-blur-lg  rounded-lg   mt-10  mb-2  items-center">
