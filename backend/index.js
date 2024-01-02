@@ -11,7 +11,7 @@ dotenv.config();
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true });
 
 const bcryptSalt = bcrypt.genSaltSync(10);
-const  j = process.env.JWT_SECRET;
+const  jwtscrect = process.env.JWT_SECRET;
 // Add middleware for JSON parsing
 app.use(express.json());
 app.use(cookieParser()); // Add parentheses here
@@ -20,7 +20,7 @@ app.use(cookieParser()); // Add parentheses here
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL,
+    origin:'http://localhost:5173'
   })
 );
 
