@@ -1,23 +1,26 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const app = express();
 const mongoose = require('mongoose');
 const User = require('./model/user');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
-const ws = require('ws')
+const socketSetup = require('./socket');
+
+// const { Server } = require("socket.io");
+ 
 dotenv.config();
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true });
 
 const bcryptSalt = bcrypt.genSaltSync(10);
-const  jwtscrect = process.env.JWT_SECRET;
-// Add middleware for JSON parsing
+ 
+const app = express();
+ 
 app.use(express.json());
-app.use(cookieParser()); // Add parentheses here
-
-// CORS configuration
+app.use(cookieParser());  
+ 
+ 
 app.use(
   cors({
     credentials: true,
@@ -78,7 +81,9 @@ app.post('/login', async (req, res) => {
    }
 });
 
-// MongoDB connection events
+
+socketSetup();
+
 mongoose.connection.on('connected', () => {
   console.log('Connected to MongoDB');
 });
@@ -89,29 +94,9 @@ mongoose.connection.on('error', (err) => {
 
 // Start the server
 const PORT = process.env.PORT || 8000;
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
 
-
-const wss = new ws.WebSocketServer({server});
-wss.on('connection',(connection,req)=>{
-    const cookies = req.headers.cookie;
-    if(cookies){
-      const tokenCookieString  =   cookies.split(';').find(str=>str.startsWith('token='));
-       if(tokenCookieString){
-        const token = tokenCookieString.split('=')[1];
-        if(token){
-           jwt.verify(token,process.env.JWT_SECRET,{},(err,userData)=>{
-                 if(err)throw err;
-                const {userId,username}= userData;
-                connection.userId = userId;
-                connection.username = username;
-           })
-        }
-       }
-    }
-
-    console.log([...wss.clients].length);
-})
+ 
